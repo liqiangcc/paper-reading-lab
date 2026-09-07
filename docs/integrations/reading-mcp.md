@@ -6,7 +6,7 @@
 
 保留 `paper_id / revision_id` 与 provider 的 `document_id / content_hash / normalized_document_hash / segmentation_version` 绑定。provider document id 不能替代论文版本，旧 hash/locator 不能静默套用新 normalization。
 
-从已保存身份恢复；只在需要打开来源或身份核验时调用相应工具，不在每一句枚举所有工具或单独做健康探针。实际成功调用才是可用性证据。
+使用原阅读会话保有的身份；只在需要打开来源或身份核验时调用相应工具，不在每一句枚举所有工具或单独做健康探针。实际成功调用才是可用性证据。精确回读用于当前单元和原会话内回看，不提供跨会话上下文重建。
 
 ## 范围与读取
 
@@ -26,7 +26,7 @@ named-section 边界优先取不含正文的结构层级或绑定当前 identity
 | --- | --- |
 | 返回一个单元 | 核对身份及范围，记录已暴露单元与待完成动作，再精确回读。同一响应即使报告 section_complete，也先完成这个单元的分析。 |
 | 无单元且 section_complete=true | 结合 coverage 确认没有 unsupported gaps / 未覆盖 Source；仅报告当前 section 枚举结束，不宣称整篇读完。下一 section 仍检查授权，且本次不自动跨节读取。 |
-| 无单元且未确认结束，或 coverage 有缺口 | 保存锚点及不完整事实，不把空结果解释为结束，不切 section 或用搜索补文；待原因明确再恢复。 |
+| 无单元且未确认结束，或 coverage 有缺口 | 保留锚点及不完整事实，不把空结果解释为结束，不切 section 或用搜索补文；待原因明确后在原会话重试。 |
 | 返回多于一个单元或越界内容 | 记录全部实际暴露范围并停止；不挑一条后声称 exactly-one 或无污染。 |
 | 精确回读截断 / complete=false | 保留同一 target locator，下一动作仍是补全该目标；不能使用枚举 next_cursor 推进新单元。 |
 
@@ -36,7 +36,7 @@ named-section 边界优先取不含正文的结构层级或绑定当前 identity
 
 `STALE_LOCATOR / STALE_CURSOR / identity mismatch` 停止精确续作；不拿旧文本做 fuzzy search。原文缺失不使用模型记忆、旧 Issue 解释或 Web 替代。
 
-枚举已经返回文字后，即使精确回读失败，也要保留实际暴露范围；不谎称零揭示。工具或写入失败时保存能确认的状态，恢复不猜测跳过单元。
+枚举已经返回文字后，即使精确回读失败，也要保留实际暴露范围；不谎称零揭示。工具或写入失败时记录能确认的事实，原会话重试不猜测跳过单元。
 
 `search_document` 不得用于获取未来正文、帮助预测或模糊恢复；它不是默认顺序阅读工具。需要外部/跨版本调查时先单独获授权。
 
