@@ -6,7 +6,7 @@
 
 ## 入口
 
-日常阅读：读取目标 Issue 当前正文及其指向的最新阅读状态，然后使用 [Reading Skill](.agents/skills/source-first-reading/SKILL.md) 和 [分析协议](docs/learning/source-first-sentence-reading.md)。同一会话已经核验的规则不每句重载。
+日常阅读：按 [Reading Skill](.agents/skills/source-first-reading/SKILL.md) 区分首次启动与已有状态恢复。在任何正文调用前，先完成[规则版本加载](docs/learning/reading-sessions.md#规则版本加载)，再执行读取；同一会话已经核验的规则不每句重载。
 
 只读取本动作需要的材料。不要默认扫描全部 comments 或整仓库；恢复位置不清时，先检查最新相关控制记录，无法确定才停止。旧 body 缺少可信状态入口时不得猜测。
 

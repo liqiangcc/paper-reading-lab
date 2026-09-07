@@ -32,7 +32,7 @@ named-section 定位不返回未来正文；无法安全建立边界则先停。
 
 ### I-44 记录真实停点
 
-当前 locator 与实际已揭示范围不能省略；不要把枚举后回读失败说成未揭示。
+当前 locator 与实际已揭示范围不能省略；已揭示不等于已完成分析。失败恢复先处理[未完成单元](../learning/reading-sessions.md#已揭示与已完成)，不能跳到下一条。
 
 ### I-49 状态归属
 
@@ -44,7 +44,7 @@ named-section 定位不返回未来正文；无法安全建立边界则先停。
 
 ### I-58 契约版本
 
-分析契约记录 id 与来源 commit；旧 Profile bytes/历史结果不静默改写。
+分析契约记录 id 与来源 commit，在正文调用前按[版本加载规则](../learning/reading-sessions.md#规则版本加载)读取；旧 Profile bytes/历史结果不静默改写。
 
 ### I-59 显式切换
 

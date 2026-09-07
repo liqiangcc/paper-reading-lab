@@ -18,6 +18,20 @@ named-section 边界优先取不含正文的结构层级或绑定当前 identity
 
 一个 canonical unit 可以包含多个表面句子，也可能是 fragment/paragraph/heading/caption。保留实际 kind 和顺序，不自造新 identity；结构单元也消耗当前一次读取，除非已有 scope 明确允许进一步过滤。
 
+## 返回结果处理
+
+枚举的 `complete / section_complete` 描述流与章节状态，不能直接当作某条正文已完整回读的证据；`max_items=1` 也不保证必有一条结果。
+
+| 结果 | 动作 |
+| --- | --- |
+| 返回一个单元 | 核对身份及范围，记录已暴露单元与待完成动作，再精确回读。同一响应即使报告 section_complete，也先完成这个单元的分析。 |
+| 无单元且 section_complete=true | 结合 coverage 确认没有 unsupported gaps / 未覆盖 Source；仅报告当前 section 枚举结束，不宣称整篇读完。下一 section 仍检查授权，且本次不自动跨节读取。 |
+| 无单元且未确认结束，或 coverage 有缺口 | 保存锚点及不完整事实，不把空结果解释为结束，不切 section 或用搜索补文；待原因明确再恢复。 |
+| 返回多于一个单元或越界内容 | 记录全部实际暴露范围并停止；不挑一条后声称 exactly-one 或无污染。 |
+| 精确回读截断 / complete=false | 保留同一 target locator，下一动作仍是补全该目标；不能使用枚举 next_cursor 推进新单元。 |
+
+截断时可按当前工具契约，在同一 document、身份和 target 内增大 `max_chars` 重读，或使用明确绑定该目标的 read cursor 连续补全；每块核对范围、顺序和覆盖，完整后才分析。无有效 continuation、连续两次无覆盖进展或同一故障重复时，保存待完成动作并停止重试。identity mismatch / stale 立即停止，不适用自动重试。回读成功但输出中断时按[未完成单元规则](../learning/reading-sessions.md#已揭示与已完成)恢复分析。
+
 ## 异常
 
 `STALE_LOCATOR / STALE_CURSOR / identity mismatch` 停止精确续作；不拿旧文本做 fuzzy search。原文缺失不使用模型记忆、旧 Issue 解释或 Web 替代。

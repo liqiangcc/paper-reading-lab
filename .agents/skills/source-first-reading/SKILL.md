@@ -1,25 +1,29 @@
 ---
 name: source-first-reading
-description: 基于 reading-mcp 原文提供一次高质量逐句分析，支持下一句、追问、回看和继续；不用于仓库修改；只负责原文分析和必要的阅读状态，不提供训练模式。
+description: 基于 reading-mcp 原文开始或恢复逐句分析，支持下一句、追问和回看；负责原文分析与必要阅读状态，不用于仓库修改。
 ---
 
 # Source-First Reading
 
-遵循 [AGENTS](../../../AGENTS.md) 和 [分析协议](../../../docs/learning/source-first-sentence-reading.md)。本文件只保留操作步骤，不复制分析质量标准。
+遵循 [AGENTS](../../../AGENTS.md)。本文件只定义操作，分析质量由阅读状态绑定的协议定义。
 
 ## 开始或恢复
 
-读取目标 Issue 当前正文及明确指向的 [阅读状态](../../../docs/learning/reading-sessions.md)，核对 Source identity、已读 locator、授权范围、分析契约和必要前文模型。默认不读取全部评论或历史验收答案。旧记录缺失/冲突时按 [状态规则](../../../docs/workflows/issue-driven-workflow.md) 处理，不能猜测游标。
+有目标 Paper Issue 时先读其正文；尚无明确 Issue 时先查找该论文已有入口，避免重复创建。检查是否已有阅读历史；已有状态时按[恢复规则](../../../docs/workflows/issue-driven-workflow.md#恢复与并发)取得当前记录，核对身份、范围、已揭示位置、未完成动作及前文模型。旧指针或状态丢失不能视作首次阅读，默认不加载全部评论。
+
+确认首次启动时：复用已有 Primary Issue，尚无则在用户已决定开始该论文后创建；核对论文版本与来源，用 `open_document` 获取身份、`get_document_structure` 的无正文结构确定用户授权范围及起点。版本或范围不明时只询问缺失选择，不读取正文探路；候选清单本身不授予阅读范围。完成下述版本加载后，保存初始状态（已揭示位置与待完成单元均为 none、前文模型为空）并核对 Issue 指针，首单元从该范围的结构起点读取，不编造 anchor。
+
+两条路径都在任何正文调用前完成[规则版本加载](../../../docs/learning/reading-sessions.md#规则版本加载)。新状态须带固定契约 commit；已有绑定不可因仓库更新静默切换。
 
 同一会话已核验的规则和状态直接继续使用；不用每句重读仓库、探测所有工具或新开 Session。能力检查并入实际需要的工具调用。
 
 ## 下一句
 
-1. 确认下一单元在当前授权范围内；边界无法确认或将越界时先停，不先读再改范围。
-2. 调用 `get_text_units`，使用绑定 document、当前 owner/section 和精确 anchor，默认 `requested_kind=sentence`、`coverage_policy=preserve_source`、`direction=forward`、`max_items=1`。
-3. 使用返回的 `TextLocator` 调用 `read_document(document_id, target_locator)` 精确回读，不同时加 `section_id`；核对 identity、范围、完整性。保留 provider 单元，不擅自过滤后再读取第二个。
-4. 按阅读状态绑定的 `contract_source_commit` 读取并执行[分析协议的默认呈现](../../../docs/learning/source-first-sentence-reading.md#默认呈现首版高密度机制闭环风格)。协议是唯一风格定义；本 Skill 和 Issue 不复制呈现清单。同一会话已核验该 commit 时直接复用，旧绑定缺失或切换按[状态规则](../../../docs/learning/reading-sessions.md#范围与版本)处理。
-5. 本次输出结束，等待用户继续；不附带考试、长 checklist 或新会话提示词。
+1. 先检查[未完成单元](../../../docs/learning/reading-sessions.md#已揭示与已完成)：若存在，恢复同一目标的回读或分析，本次不枚举新单元。否则确认下一单元可被工具限制在当前授权范围内；不能确认时先停。
+2. 无待完成单元时调用 `get_text_units`，使用绑定 document、允许 owner/section 和已完成单元的精确 anchor；首次无 anchor 时从已确认的结构起点读取。默认 `requested_kind=sentence`、`coverage_policy=preserve_source`、`direction=forward`、`max_items=1`。
+3. 按[返回结果处理](../../../docs/integrations/reading-mcp.md#返回结果处理)检查枚举结果；取得单元后立即记录实际暴露与待完成动作，再用其 `TextLocator` 调用 `read_document(document_id, target_locator)`，不同时加 `section_id`。核对 identity、范围、完整性；不擅自过滤后再读取第二个。
+4. 同一目标完整回读后，执行开始时已加载的固定版本分析协议。完成分析输出后更新模型、清除待完成动作；不能仅凭工具成功标记分析完成。
+5. 本次输出结束，等待用户继续。若本次是失败恢复，完成后也不顺带推进下一单元。
 
 ## 追问与回看
 
@@ -29,6 +33,6 @@ description: 基于 reading-mcp 原文提供一次高质量逐句分析，支持
 
 自然边界、暂停、交接、范围变化或故障时写一份完整、简短的阅读状态并回读；不把逐句输出逐条写成 START/RESULT/HANDOFF。
 
-若在枚举后精确回读失败，保留已经实际暴露的单元/locator及失败事实，不谎称未揭示。身份或范围不确定时停止，不能换成最像的文本。未持久化的会话进度可能丢失；恢复以最后可靠保存位置为准，必要时重复已读单元而不猜测跳过。
+失败时保留[未完成动作](../../../docs/learning/reading-sessions.md#已揭示与已完成)，重试界限见[返回结果处理](../../../docs/integrations/reading-mcp.md#返回结果处理)。身份或范围不确定时停止，不能换成最像的文本。未持久化进度可能丢失；无法确认分析已完成时先恢复同一单元，不猜测跳过。
 
 原文正确性不受简化流程影响；阻塞原因未变不重复写同样记录。只在实际需要交接时换会话，不为了保持风格而定期重测。
