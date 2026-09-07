@@ -6,6 +6,8 @@ AI 负责把对象、线索、必要前提和推导连接层层讲透，使后�
 
 ## 怎么用
 
+从[待读论文清单](https://github.com/liqiangcc/paper-reading-lab/issues/28)选题，或按标签查看[论文入口](https://github.com/liqiangcc/paper-reading-lab/issues?q=is%3Aissue%20label%3Atype%3Apaper)、[阅读清单](https://github.com/liqiangcc/paper-reading-lab/issues?q=is%3Aissue%20label%3Atype%3Areading-list)、[维护任务](https://github.com/liqiangcc/paper-reading-lab/issues?q=is%3Aissue%20label%3Atype%3Atask)。进度只从对应 Paper Issue 的当前状态恢复。
+
 ```text
 @github-mcp @reading-mcp
 
@@ -29,6 +31,8 @@ AI 负责把对象、线索、必要前提和推导连接层层讲透，使后�
 - [文档导航](docs/README.md)：工具细节、工程维护和历史证据按需查阅。
 
 reading-mcp 提供真实原文与精确定位；GitHub 保存规则和进度。AI 分析不替代原文，不使用未揭示后文，不擅自切换论文版本。
+
+本仓库维护分析规则与最小阅读状态：Source binding 固定论文版本及 provider 身份，阅读状态保存范围、位置和已读模型，Primary Issue 提供恢复入口。原文解析和单元 identity 由 reading-mcp 负责；不另建解析器、句子索引、完整聊天数据库或知识导出流水线。Session 可以暂停、继续或结束，一次结束不表示论文永久学完。
 
 ## 验证边界
 

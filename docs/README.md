@@ -16,11 +16,9 @@
 - [核心不变量](validation/invariants.md) 与 [检查范围](validation/repository-checks.md)：结构检查不等于分析质量评分。
 - [语言约定](conventions/language.md)：中文解释与稳定术语。
 
-## 兼容入口，不是新增步骤
-
-[Bootstrap](workflows/conversation-bootstrap.md)、[领域模型](domain/model.md)、[生命周期](workflows/paper-reading-lifecycle.md)、[架构边界](architecture/boundaries.md) 已收敛为短说明，不再平行维护流程或长 schema。
-
 ## 历史引用
+
+重复兼容页已移除：架构与最小模型见 [README](../README.md#规则放在哪里)，生命周期见[阅读状态](learning/reading-sessions.md)，恢复见[Issue 工作流](workflows/issue-driven-workflow.md#恢复与并发)。旧路径仅按固定版本追溯：[Bootstrap](https://github.com/liqiangcc/paper-reading-lab/blob/13c3f2fa22f848f23c7320c689b6cc54b2376548/docs/workflows/conversation-bootstrap.md)、[领域模型](https://github.com/liqiangcc/paper-reading-lab/blob/13c3f2fa22f848f23c7320c689b6cc54b2376548/docs/domain/model.md)、[生命周期](https://github.com/liqiangcc/paper-reading-lab/blob/13c3f2fa22f848f23c7320c689b6cc54b2376548/docs/workflows/paper-reading-lifecycle.md)、[架构边界](https://github.com/liqiangcc/paper-reading-lab/blob/13c3f2fa22f848f23c7320c689b6cc54b2376548/docs/architecture/boundaries.md)。
 
 旧 Profile 与 Pilot 已从当前文件树删除，不保留可执行训练入口。旧 Session 需要核对历史时按绑定的 commit + path 获取；例如 [旧 Profile v0.1](https://github.com/liqiangcc/paper-reading-lab/blob/27471ed0b2b99ad9c25c088a55cbbf6ad7c5ee67/docs/learning/incremental-explanation-profile.md)、[Pilot 原记录](https://github.com/liqiangcc/paper-reading-lab/tree/c000a92c71d07026882a4d13d86b98a55ecf27fc/docs/pilot) 与 [分析契约 v1](https://github.com/liqiangcc/paper-reading-lab/blob/c000a92c71d07026882a4d13d86b98a55ecf27fc/docs/learning/source-first-sentence-reading.md)。不把 main 当成旧版本，不执行历史 next_action，不把历史未测或失败改为 PASS。
 

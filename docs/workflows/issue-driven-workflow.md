@@ -34,6 +34,8 @@
 
 完成报告记录：base/candidate、PR、实际 review 与该候选检查链接、merge SHA、对应 main 检查、剩余限制、最终状态。自审写自审，review requested 不等于独立批准；没有运行的检查不称 PASS。
 
+完整收尾证据集中保存在 Task 正文，PR 描述说明变更与验证并链接 Task；评论仅记录必要的新事实或更正，不重复整份报告。已有历史记录保持原样，不因这条约定删改。
+
 未合并为待合并；已合并但必要检查未完成为 `merged-awaiting-verification`。关闭 Task 前回读 body/state/owner，释放 owner，下一动作不能仍指向已完成项。保留历史失败，不把取消需求改成测试成功。
 
 遗留分支、已取消的实验需求与当前交付分别处理，不把它们自动变成阻塞。不得为了清理分支扩大权限或用 delete_file 冒充删除 ref。
