@@ -10,6 +10,8 @@
 
 用户通过持续阅读、回看或追问学习；分析深度由 AI 负责。已退役功能统一见[工程工作流](../workflows/issue-driven-workflow.md#已移除的流程)。
 
+一篇论文在原始专属会话中持续分析；原文、推导过程和追问共同构成理解上下文。不提供跨会话恢复或交接重建。当前会话关键前文不可用时明确缺口，不靠 Issue 摘要、旧答案或记忆拼接后宣称连续理解。
+
 ## 分析必须做到什么
 
 **忠实与明确。** 保留原文对象、指代和“可能、通常、仅在”等限定；必要术语就地解释，翻译不夹带机制推论。
@@ -39,7 +41,7 @@
 典型节奏是：
 
 ```text
-论文 / Section / 可靠正文序号（如 durable state 可恢复）
+论文 / Section / 本会话可核对的可靠正文序号
 
 当前原文
 必要的 PDF 抽取修正说明
@@ -68,14 +70,14 @@ Current revealed position
 具体要求：
 
 - **原文与翻译先行。** 展示当前 exact re-read 的 canonical SourceUnit，外语随后给忠实中文翻译，中文不重复翻译。PDF 换行、断词、空白等噪声仅可做不改变字词和语义的排版整理，并明确说明；不能补词、改写或合并多个 provider unit。
-- **位置要可靠，不猜正文计数。** 可展示论文、Section、Page、paragraph、sentence、normalized_range、effective_kind、degradation；“第 N 条正文句 / Section 总第 M 条正文句”只有 durable state 或可靠计数可恢复时才展示，缺失时省略。
+- **位置要可靠，不猜正文计数。** 可展示论文、Section、Page、paragraph、sentence、normalized_range、effective_kind、degradation；“第 N 条正文句 / Section 总第 M 条正文句”只有本会话已有可靠计数时才展示，缺失时省略。
 - **先给当前句一个总判断。** 在详细拆解前，用一两句话说明当前句的论证作用，例如“把前面几条机制串成循环”“把 OS 能力落回 Kafka 实现”“把 baseline 成本变成可比较数字”。这个判断必须由当前句和已揭示前文支撑。
 - **动态编号，不固定字段。** 对有实质信息的 SourceUnit，按当前句真正产生的理解问题动态生成 `1、2、3...`。编号标题可以是“前面的 next offset 现在真正用起来了”“Index → Segment 的映射”“但当前不能推出 Broker 完全无状态”等；不能机械填 `字面 / 前文 / 增量 / 模型` 五个槽位。
 - **用图组织机制闭环。** 空间关系、层级、数据流、Before/After 或端到端路径用图更清楚时，主动画简洁 ASCII。Source 足够时可呈现 `Problem → Baseline → Cost → Existing Capability → Decision → Mechanism → Effect → Boundary` 等实际路径，关键句末可重建完整已知模型。也可从局部 `Offset → Next Offset` 扩展到 `Position → Read → Advance` 再到 Pull loop；每层须遵循上节的增量与证据要求，不补造缺失环节。
 - **显式呈现必要边界。** 容易过度推断时，可用 Known / Derived / Unknown 小块突出限制，也可融入自然段落；不强制每句三栏。
 - **思考方法可以单独成节。** 当前句确实形成了可迁移设计方法时，可以保留“这里可以学习什么思考方法”，并把方法从当前机制中抽象出来；没有真实方法增量时省略。
 - **长度随内容变化。** 关键机制句可以有较多编号、图和多层抽象，过渡句可压缩；各层内部用自然、连续的解释，不写成字段报表或无增量的铺陈。
-- **结尾保留完整停点。** 默认给 `Current revealed position`，至少记录可靠的 Section / Page / paragraph / sentence / normalized_range / effective_kind / degradation；完整 hash 和工具参数仍留在 durable state，不要求用户每句阅读。
+- **结尾保留完整停点。** 默认给 `Current revealed position`，至少记录可靠的 Section / Page / paragraph / sentence / normalized_range / effective_kind / degradation；完整 hash 和工具参数留在会话绑定中，不要求用户每句阅读。
 
 ## 完整推导示范（虚构）
 
@@ -139,7 +141,7 @@ AI 在输出前检查：原文是否忠实？关键判断的依据和连接是�
 
 如果下一单元超出已授权范围，简短说明边界并请求继续范围；用户同意后由 Agent 保存范围变化再读。历史停点、已消费的一单元授权不被本协议自动重新激活。
 
-暂停、自然段落/机制收束、交接、故障或范围变化时保存 [一份阅读状态](reading-sessions.md)。操作位置与分析摘要可以分区保存在同一记录；只有摘要确实过长时才拆出一份引用式资产。
+按[会话与进度](reading-sessions.md)保留本会话的位置和必要记录；不生成交接摘要、模型快照或恢复资产。暂停后在原会话继续，仓库维护另开会话。
 
 ## 版本与历史
 
