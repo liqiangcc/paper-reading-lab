@@ -9,7 +9,7 @@
 ```text
 论文/Revision + reading-mcp document/hash/segmentation identity
 当前已授权范围 + 已揭示位置/精确 TextLocator
-分析契约 id + source commit（旧 Profile 如存在则保留）
+分析契约 id + contract_source_commit（完整 commit SHA，旧 Profile 如存在则保留）
 简短前文模型：已知事实、关键连接（依据与条件）、尚未回答的问题
 当前状态/阻塞 + 下一动作
 ```
@@ -22,7 +22,7 @@
 
 同一会话逐句更新当前位置；自然段落/机制收束、暂停、交接、范围变化或故障时再写 GitHub。没有这些变化不制造新 comment。用户要求保存时立即保存。
 
-写入完整新状态后，更新 Issue 正文指针并回读确认；旧状态留作历史。若写入中断导致指针落后，按 [恢复规则](../workflows/issue-driven-workflow.md#恢复与并发) 检查较新控制记录，不能按旧指针盲目前进。
+写入完整新状态后，更新 Issue 正文指针并回读确认；旧状态留作历史。保存完成须同时核对 comment URL、Source identity、locator、范围、契约 commit、摘要覆盖位置及下一动作；正文若保留这些字段的投影，也必须一致。写 comment 成功而 body 未更新只能报告部分保存，不能称交接完成。重试先定位已写入的状态，避免追加重复记录。若写入中断导致指针落后，按 [恢复规则](../workflows/issue-driven-workflow.md#恢复与并发) 检查较新控制记录，不能按旧指针盲目前进。
 
 不保存完整 transcript，也不声称未持久化的会话状态可以无损恢复。
 
@@ -32,6 +32,8 @@
 
 Source/normalization 变化不自动迁移旧 locator；分析契约切换记录一次旧/新绑定、生效位置与依据。已读位置只增不减。回看只改变视图，不把看过的内容变回未知。
 
+契约身份为 `id + contract_source_commit + path`；`main`、PR 编号或单独的 `v2` 不足以固定规则。Issue 只保存该绑定和协议链接，不复制风格清单。同 id 下改变呈现也须记录新 commit 和生效 locator。历史记录没有 commit 时标为未记录，不根据时间猜测；在明确授权采用新规则后记录一次显式绑定，保留历史缺口。
+
 历史 Session 的 completed/abandoned/contamination 保留；本轮阅读结束不意味着论文永久学完，不追加作答或验收阶段。
 
 ## 分析摘要
@@ -39,3 +41,5 @@ Source/normalization 变化不自动迁移旧 locator；分析契约切换记录
 摘要只帮助 AI 保持已读模型、分析衔接和开放问题；放在同一状态里即可。旧记录中的 Learning Artifact 只是历史命名，不是必须创建的对象、答案库或新的验收任务。历史固定候选按其原 commit 保留，不为继续阅读重新处理。
 
 摘要压缩表述，不压掉成立条件：保留“哪条已读信息，在什么前提下，支持哪个判断”，并关联必要的已读 Source 引用。不要只留下术语或最终结论，使续读时必须重新猜测理由；未解决的连接继续标为未知，不为了补全摘要读取后文。这仍是一份状态，不新增字段、文件或验收步骤。
+
+摘要覆盖落后于已揭示位置时，分别标明可靠摘要截止点与缺失范围，保留较新的真实 locator。先从同身份的既有记录恢复；仍缺失时，仅在已读边界内经 reading-mcp 精确回读必要内容以重建摘要，再推进新正文。工具不可用则保留恢复缺口；不倒退 revealed position、不把旧摘要冒充完整模型，也不以 Issue 分析代替 canonical 原文。正常完整状态不增加此恢复步骤。
