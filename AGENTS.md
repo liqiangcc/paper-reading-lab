@@ -10,9 +10,23 @@
 
 日常阅读按 [Reading Skill](.agents/skills/source-first-reading/SKILL.md)。原会话说“下一句”直接继续，不每次重载仓库或 Issue。新会话要求继续已读论文时，说明须回原阅读会话，不凭 Issue 游标启动续读，也不擅自从头重读。
 
-首次开始、会话内记录与规则加载见[会话与进度](docs/learning/reading-sessions.md)。只读取本动作所需材料，不默认扫描整仓库、旧 comments 或聊天记录。
+只读取本动作所需材料，不默认扫描整仓库、旧 comments 或聊天记录。
 
 仓库修改按[工程流程](docs/workflows/issue-driven-workflow.md#task-closure-证据门禁)使用独立分支/PR，不套 Reading Skill，也不读取论文正文验证维护。
+
+### 首次阅读前必须实际加载
+
+仅用于已确认要在专属会话首次开始的阅读，不授权新会话恢复已读论文，也不要求维护动作加载阅读材料。读过本 AGENTS.md 不等于读过它链接的文件；以下文件必须在本阅读会话中实际取得并完整阅读，不能只看路径、标题、搜索摘要或历史“已加载”声明：
+
+1. [Reading Skill](.agents/skills/source-first-reading/SKILL.md)：读取步骤与当前单元处理。
+2. [会话与进度](docs/learning/reading-sessions.md)：会话边界、未完成动作及版本规则。
+3. [Source Adapter](docs/integrations/reading-mcp.md)：工具返回、身份、范围与完整性约束。
+4. [分析协议](docs/learning/source-first-sentence-reading.md)：翻译、推导、呈现和事实边界的完整要求。
+5. [完整展开示范](docs/learning/examples/mechanism-closure.md)：解释颗粒度与展开节奏参照，不是论文证据。
+
+操作规则使用当前版本；首次分析协议与示范使用同一已核验 main commit，记录在本会话。文件内容截断时继续取得剩余部分；任一必读文件未取得或未读完，先说明具体缺失，不调用任何会返回论文正文的工具，不开始分析。链接可见、文件存在或 Source 工具可用都不能替代实际加载。
+
+本会话实际读完后，在首次正文调用前用一句简短进度说明已加载的协议 commit 和示范；未完成不得声称完成。无需展示 hash 清单、自检表或要求用户验收。同一会话后续复用已经读完且仍可用的规则，不每句重载；补齐漏读规则不等于恢复缺失的论文上下文。已有阅读的协议更新仍须显式授权，不静默换版。
 
 ## 必须保留的边界
 
