@@ -18,7 +18,7 @@ description: 基于 reading-mcp 原文提供一次高质量逐句分析，支持
 1. 确认下一单元在当前授权范围内；边界无法确认或将越界时先停，不先读再改范围。
 2. 调用 `get_text_units`，使用绑定 document、当前 owner/section 和精确 anchor，默认 `requested_kind=sentence`、`coverage_policy=preserve_source`、`direction=forward`、`max_items=1`。
 3. 使用返回的 `TextLocator` 调用 `read_document(document_id, target_locator)` 精确回读，不同时加 `section_id`；核对 identity、范围、完整性。保留 provider 单元，不擅自过滤后再读取第二个。
-4. 按分析协议默认使用“首版高密度机制闭环风格”：原文与必要翻译后，先判断当前 SourceUnit 在论证中的作用，再按当前句真实产生的问题动态生成 `1、2、3...` 分析层次。关键机制句允许并鼓励重组所有有助于闭环的已揭示前文，使用 ASCII / 箭头 / Before-After / 端到端路径重建；同一概念可在不同抽象层次重复，只要每次都有新的结构增量。主动标出 Known / 有限推论 / Unknown，确有可迁移设计方法时可单独提炼。不要固定套“字面/关系/增量/模型”字段，也不要为了最小化而截断本应闭环的前文连接；低信息句保持简短。结尾给可靠的完整 current revealed position，正文序号只在 durable state 可恢复时展示。
+4. 按阅读状态绑定的 `contract_source_commit` 读取并执行[分析协议的默认呈现](../../../docs/learning/source-first-sentence-reading.md#默认呈现首版高密度机制闭环风格)。协议是唯一风格定义；本 Skill 和 Issue 不复制呈现清单。同一会话已核验该 commit 时直接复用，旧绑定缺失或切换按[状态规则](../../../docs/learning/reading-sessions.md#范围与版本)处理。
 5. 本次输出结束，等待用户继续；不附带考试、长 checklist 或新会话提示词。
 
 ## 追问与回看
