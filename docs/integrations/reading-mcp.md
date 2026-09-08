@@ -22,10 +22,25 @@ named-section 边界优先取不含正文的结构层级或绑定当前 identity
 
 枚举的 `complete / section_complete` 描述流与章节状态，不能直接当作某条正文已完整回读的证据；`max_items=1` 也不保证必有一条结果。
 
+`get_text_units.complete=true` 表示本次遍历已到达指定方向的 section 边界，包括从 anchor 开始的续读。`section_complete` 只对从 section 边界开始、覆盖完整的遍历成立；anchor 及其 cursor 续页即使到达节末也会返回 `section_complete=false`。`coverage` 统计整个声明流的源内容表示情况，不证明本会话已经读过 anchor 或其前文。
+
+对默认 forward / preserve_source 读取，在身份、owner/section、kind、policy 与请求一致的前提下，使用以下信号确认节末，不要求 `section_complete=true`：
+
+```text
+complete == true
+next_cursor == null
+stream.direction == forward
+stream.end_index == stream.total_items
+coverage.source_complete == true
+coverage.unsupported_gaps == 0
+```
+
+这仅确认流的前向边界。声称整节已读完还需原阅读会话中同一 identity 下的连续阅读记录，且 anchor 和所有已返回单元的回读、分析均已完成；记录缺失不得从 Issue 重建。切换下一 section 仍须 scope 授权，不用读取下一 section 正文探测边界。backward 的 `complete=true / start_index=0` 只确认节首；`eligible_only` 耗尽也不证明完整源覆盖。空结果本身不能证明结束。
+
 | 结果 | 动作 |
 | --- | --- |
-| 返回一个单元 | 核对身份及范围，记录已暴露单元与待完成动作，再精确回读。同一响应即使报告 section_complete，也先完成这个单元的分析。 |
-| 无单元且 section_complete=true | 结合 coverage 确认没有 unsupported gaps / 未覆盖 Source；仅报告当前 section 枚举结束，不宣称整篇读完。下一 section 仍检查授权，且本次不自动跨节读取。 |
+| 返回一个单元 | 核对身份及范围，记录已暴露单元与待完成动作，再精确回读。同一响应即使报告 complete 或 section_complete，也先完成这个单元的分析；完成后等待用户，不自动跨节。 |
+| 无单元且满足上述节末信号（包括 section_complete=false 的 anchor 续读） | 确认当前 section 流已枚举到末尾，不因 section_complete=false 重试或阻塞。结合本会话连续阅读记录判断整节是否读完，不宣称整篇读完。下一 section 仍检查授权，且本次不自动跨节读取。 |
 | 无单元且未确认结束，或 coverage 有缺口 | 保留锚点及不完整事实，不把空结果解释为结束，不切 section 或用搜索补文；待原因明确后在原会话重试。 |
 | 返回多于一个单元或越界内容 | 记录全部实际暴露范围并停止；不挑一条后声称 exactly-one 或无污染。 |
 | 精确回读截断 / complete=false | 保留同一 target locator，下一动作仍是补全该目标；不能使用枚举 next_cursor 推进新单元。 |
