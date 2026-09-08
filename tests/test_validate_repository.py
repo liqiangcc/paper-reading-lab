@@ -182,6 +182,21 @@ class RepositoryChecks(unittest.TestCase):
                 self.assertNotIn(path, validator.REQUIRED_FILES)
                 self.assertNotIn(path.removeprefix("docs/"), validator.CANONICAL_NAV_ENTRIES)
 
+    def test_style_references_are_required_repository_assets(self) -> None:
+        # Existence is structural protection, not a prose-quality score or a
+        # declaration that the real-paper sample is a daily bootstrap input.
+        for path in validator.REQUIRED_FILES:
+            self.write(path, "placeholder\n")
+        for name in ("mechanism-closure.md", "argument-closure.md",
+                     "style-reference.md", "kafka-consumer-group-user-sample.md"):
+            target = f"docs/learning/examples/{name}"
+            with self.subTest(target=target):
+                self.assertIn(target, validator.REQUIRED_FILES)
+                (self.root / target).unlink()
+                self.assertIn(f"missing required file: {target}",
+                              self.check("validate_required_files"))
+                self.write(target, "placeholder\n")
+
     def test_repository_and_mutation_exit_codes(self) -> None:
         shutil.copytree(REPO, self.root, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".git", "__pycache__"))
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):

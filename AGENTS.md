@@ -23,6 +23,9 @@
 3. [Source Adapter](docs/integrations/reading-mcp.md)：工具返回、身份、范围与完整性约束。
 4. [分析协议](docs/learning/source-first-sentence-reading.md)：翻译、推导、呈现和事实边界的完整要求。
 5. [完整展开示范](docs/learning/examples/mechanism-closure.md)：解释颗粒度与展开节奏参照，不是论文证据。
+6. [概念与论证展开示范](docs/learning/examples/argument-closure.md)：用自包含虚构材料对照释义与模型更新，防止把概念论文当成低信息句解。
+
+两份虚构示范与分析协议使用同一来源 commit。维护用的[用户确认样本说明](docs/learning/examples/style-reference.md)及其中真实 Kafka transcript 不属于首次阅读必读材料；不能为校准风格而自动揭示另一篇论文或目标论文的未来内容。
 
 操作规则使用当前版本；首次分析协议与示范使用同一已核验 main commit，记录在本会话。文件内容截断时继续取得剩余部分；任一必读文件未取得或未读完，先说明具体缺失，不调用任何会返回论文正文的工具，不开始分析。链接可见、文件存在或 Source 工具可用都不能替代实际加载。
 
