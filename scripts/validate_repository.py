@@ -27,6 +27,7 @@ REQUIRED_FILES = (
     "docs/learning/source-first-sentence-reading.md",
     "docs/learning/examples/mechanism-closure.md",
     "docs/learning/examples/argument-closure.md",
+    "docs/learning/examples/output-format.md",
     "docs/learning/examples/style-reference.md",
     "docs/learning/examples/kafka-consumer-group-user-sample.md",
     "docs/learning/reading-sessions.md",
