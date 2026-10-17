@@ -24,7 +24,7 @@
 4. [分析协议](docs/learning/source-first-sentence-reading.md)：翻译、推导、呈现和事实边界的完整要求。
 5. [完整展开示范](docs/learning/examples/mechanism-closure.md)：解释颗粒度与展开节奏参照，不是论文证据。
 6. [概念与论证展开示范](docs/learning/examples/argument-closure.md)：用自包含虚构材料对照释义与模型更新，防止把概念论文当成低信息句解。
-7. [输出版式示范](docs/learning/examples/output-format.md)：用虚构材料示范“读准 → 接上 → 推出 → 守住”主线、接入图、零摩擦写法与一行停点，不是论文证据。
+7. [输出版式示范](docs/learning/examples/output-format.md)：用虚构材料示范逐句版式（起势、线索加洞见的小标题、小步推进、先排除误读、就地设边界）、当前 Known / Unknown 与一行停点，不是论文证据。
 
 三份虚构示范与分析协议使用同一来源 commit。维护用的[用户确认样本说明](docs/learning/examples/style-reference.md)及其中真实 Kafka transcript 不属于首次阅读必读材料；不能为校准风格而自动揭示另一篇论文或目标论文的未来内容。
 
