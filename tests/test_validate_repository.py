@@ -187,7 +187,7 @@ class RepositoryChecks(unittest.TestCase):
         # declaration that the real-paper sample is a daily bootstrap input.
         for path in validator.REQUIRED_FILES:
             self.write(path, "placeholder\n")
-        for name in ("mechanism-closure.md", "argument-closure.md",
+        for name in ("mechanism-closure.md", "argument-closure.md", "output-format.md",
                      "style-reference.md", "kafka-consumer-group-user-sample.md"):
             target = f"docs/learning/examples/{name}"
             with self.subTest(target=target):
